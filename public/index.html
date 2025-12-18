@@ -185,6 +185,11 @@
                 h('line', { x1: 22, y1: 2, x2: 11, y2: 13 }),
                 h('polygon', { points: '22 2 15 22 11 13 2 9 22 2' })
             ),
+            Download: () => h('svg', { className: 'icon', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
+                h('path', { d: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' }),
+                h('polyline', { points: '7 10 12 15 17 10' }),
+                h('line', { x1: 12, y1: 15, x2: 12, y2: 3 })
+            ),
             Coffee: () => h('svg', { className: 'icon', viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2 },
                 h('path', { d: 'M18 8h1a4 4 0 0 1 0 8h-1' }),
                 h('path', { d: 'M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z' }),
@@ -348,6 +353,50 @@
                 document.getElementById('success_modal').style.display = 'none';
             };
 
+            const exportToCSV = () => {
+                if (entries.length === 0) {
+                    alert('目前沒有記錄可以導出');
+                    return;
+                }
+
+                // CSV 標題
+                const headers = ['姓名', '日期', '早餐', '午餐', '晚餐', '運動', '睡眠', '心情', '評分', '備註'];
+                
+                // 轉換數據
+                const csvData = entries.map(entry => [
+                    entry.name || '',
+                    entry.date || '',
+                    entry.breakfast || '',
+                    entry.lunch || '',
+                    entry.dinner || '',
+                    entry.exercise || '',
+                    entry.sleep || '',
+                    entry.mood || '',
+                    entry.rating || '',
+                    entry.notes || ''
+                ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','));
+
+                // 組合 CSV 內容
+                const csvContent = [
+                    headers.join(','),
+                    ...csvData
+                ].join('\n');
+
+                // 添加 BOM 以支援中文
+                const BOM = '\uFEFF';
+                const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+                
+                // 創建下載連結
+                const link = document.createElement('a');
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', `生活記錄_${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
             return h('div', { className: 'min-h-screen' },
                 // 導航欄
                 h('nav', { className: 'gradient-purple-pink navbar-rounded shadow-lg p-6 mb-8' },
@@ -356,7 +405,14 @@
                             h(Icons.Activity),
                             '生活記錄系統'
                         ),
-                        googleFormUrl || googleSheetUrl ? h('div', { className: 'flex gap-4' },
+                        h('div', { className: 'flex gap-4' },
+                            h('button', {
+                                onClick: exportToCSV,
+                                className: 'btn btn-sm bg-white text-purple-600 hover:bg-gray-100 btn-gradient flex items-center gap-2'
+                            }, 
+                                h(Icons.Download),
+                                '導出 CSV'
+                            ),
                             googleFormUrl && h('a', { 
                                 href: googleFormUrl, 
                                 target: '_blank',
@@ -367,7 +423,7 @@
                                 target: '_blank',
                                 className: 'btn btn-sm bg-white text-purple-600 hover:bg-gray-100 btn-gradient'
                             }, '查看數據')
-                        ) : null
+                        )
                     )
                 ),
 
