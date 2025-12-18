@@ -263,6 +263,10 @@
             // Google 表單和試算表連結
             const googleFormUrl = null; // 如需要可填入 Google 表單連結
             const googleSheetUrl = "https://docs.google.com/spreadsheets/d/1EzUN9l0pH0-as533cCkkD6IrzwGzKNAGVI6o507dgGQ/edit";
+            
+            // Google Sheets API 網址（需要設置 Apps Script）
+            // 請參考 GOOGLE_SHEETS_SETUP.md 設置說明
+            const googleSheetApiUrl = null; // 填入你的 Apps Script 部署網址
 
             useEffect(() => {
                 loadEntries();
@@ -309,8 +313,27 @@
                 };
 
                 try {
+                    // 儲存到本地
                     await storage.set(`daily_entry:${newEntry.id}`, JSON.stringify(newEntry));
                     setEntries([newEntry, ...entries]);
+                    
+                    // 同步到 Google Sheets（如果已設置）
+                    if (googleSheetApiUrl) {
+                        try {
+                            await fetch(googleSheetApiUrl, {
+                                method: 'POST',
+                                mode: 'no-cors',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(formData)
+                            });
+                            console.log('已同步到 Google Sheets');
+                        } catch (error) {
+                            console.log('Google Sheets 同步失敗（數據已保存在本地）:', error);
+                        }
+                    }
+                    
                     setFormData({
                         name: '',
                         date: new Date().toISOString().split('T')[0],
@@ -327,6 +350,7 @@
                     document.getElementById('success_modal').style.display = 'flex';
                 } catch (error) {
                     console.error('儲存失敗:', error);
+                    alert('儲存失敗，請稍後再試');
                 }
             };
 
