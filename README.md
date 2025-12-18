@@ -1,6 +1,10 @@
 # 🌟 生活記錄系統
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/wuhua-7/LifeRecord)
+
 簡單優雅的每日生活追蹤工具，幫助你記錄和管理日常生活。
+
+> 🔗 **GitHub**: https://github.com/wuhua-7/LifeRecord
 
 ## ✨ 功能特色
 
@@ -27,11 +31,27 @@ npm run dev
 
 ### 部署到 Vercel
 
-1. Fork 此專案
-2. 在 Vercel 導入專案
-3. 點擊部署即可
+#### 快速部署（推薦）
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
+點擊下方按鈕一鍵部署：
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/wuhua-7/LifeRecord)
+
+#### 手動部署步驟
+
+1. 訪問 [Vercel](https://vercel.com) 並使用 GitHub 登入
+2. 點擊 "Add New..." → "Project"
+3. 選擇 `wuhua-7/LifeRecord` 倉庫
+4. 配置設定：
+   - Framework Preset: **Other**
+   - Root Directory: `./`
+   - Output Directory: `public`
+5. 點擊 "Deploy" 開始部署
+6. 等待 1-2 分鐘，完成後獲得專屬網址
+
+#### 自動部署
+
+每次推送到 GitHub 的 `main` 分支，Vercel 會自動重新部署你的網站！
 
 ## 🛠️ 技術棧
 
