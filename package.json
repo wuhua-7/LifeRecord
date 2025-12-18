@@ -1,0 +1,22 @@
+{
+  "name": "life-tracker",
+  "version": "1.0.0",
+  "description": "生活記錄系統 - 簡單優雅的每日生活追蹤工具",
+  "main": "public/index.html",
+  "scripts": {
+    "dev": "npx serve public",
+    "build": "echo 'Static site - no build needed'",
+    "preview": "npx serve public"
+  },
+  "keywords": [
+    "life-tracker",
+    "daily-log",
+    "react",
+    "tailwind"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}
